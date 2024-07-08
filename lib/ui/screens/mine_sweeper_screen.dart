@@ -1,5 +1,6 @@
 import 'package:adaptor_games/ui/components.dart';
 import 'package:adaptor_games/ui/theme/colors.dart';
+import 'package:adaptor_games/utils/color_operation.dart';
 import 'package:adaptor_games/utils/game_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -108,8 +109,8 @@ class _MineSweepGameScreenState extends State<MineSweepGameScreen> {
         child: Container(
           decoration: BoxDecoration(
             color: current.reveal
-                ? AppColor.clickedCard
-                : AppColor.lightPrimaryColor,
+                ? add3_2(Colors.grey.shade800, Theme.of(context).hintColor)
+                : add4_1(Colors.brown, Theme.of(context).canvasColor),
             borderRadius: BorderRadius.circular(6),
           ),
           child: Center(child: getContent(context, current, gameData)),
@@ -150,11 +151,8 @@ class _MineSweepGameScreenState extends State<MineSweepGameScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              getStatusField(
-                  context,
-                  Icons.flag,
-                  (MineSweeperGame.mineCountSetting - gameData.flagCount)
-                      .toString()),
+              getStatusField(context, Icons.flag,
+                  (gameData.getActualMine() - gameData.flagCount).toString()),
               getStatusField(
                   context, Icons.timer, _formatTime(_secondsElapsed)),
               switchButton(context, gameData),

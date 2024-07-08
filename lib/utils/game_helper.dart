@@ -55,6 +55,7 @@ class MineSweeperGame {
     if (cell.flagged) return;
     if (cell.content == "X" || getLeftMine() == 0) {
       showMines();
+      win = false;
       gameOver = true;
     } else {
       int mineCount = 0;
