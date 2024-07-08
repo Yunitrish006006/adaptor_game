@@ -6,5 +6,9 @@
   "language":"語言",
   "theme":"主題",
 
-  "title_main":"主頁"
+  "title_main":"主頁",
+  "title_setting":"設定",
+  "title_mine_sweeper" : "踩地雷",
+  "message_win" : "你贏了!",
+  "message_lose" : "你輸了!"
 }

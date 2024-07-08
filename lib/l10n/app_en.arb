@@ -6,5 +6,9 @@
   "language":"Language",
   "theme":"Theme",
 
-  "title_main":"main page"
+  "title_main":"main page",
+  "title_setting":"settings",
+  "title_mine_sweeper" : "Mine Sweeper",
+  "message_win" : "You Win!",
+  "message_lose" : "You lose!"
 }
