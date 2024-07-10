@@ -95,11 +95,41 @@ class _MineSweepGameScreenState extends State<MineSweepGameScreen> {
       }
     }
 
+    Widget getEndGameObject(BuildContext context) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            gameData.win
+                ? AppLocalizations.of(context)!.message_win
+                : AppLocalizations.of(context)!.message_lose,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
+          ),
+          IconButton(
+            onPressed: () {
+              setState(() {
+                gameData.resetGame();
+                gameData.gameOver = false;
+                _resetTimer();
+                Navigator.pop(context);
+              });
+            },
+            icon: const Icon(Icons.refresh, size: 40),
+          )
+        ],
+      );
+    }
+
     Widget getTile(BuildContext context, int index) {
       Cell current = gameData.map[index ~/ gameData.col][index % gameData.col];
       return GestureDetector(
         onTap: gameData.gameOver
-            ? null
+            ? () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) =>
+                        getEndGameObject(context));
+              }
             : () {
                 setState(() {
                   if (gameData.mode == "defuse") {
@@ -141,35 +171,6 @@ class _MineSweepGameScreenState extends State<MineSweepGameScreen> {
             icon: const Icon(Icons.flag));
       }
     }
-
-    // if (gameData.gameOver) {
-    //   showDialog(
-    //     context: context,
-    //     builder: (BuildContext context) => Dialog(
-    //       child: Row(
-    //         mainAxisAlignment: MainAxisAlignment.center,
-    //         children: [
-    //           Text(
-    //             gameData.win
-    //                 ? AppLocalizations.of(context)!.message_win
-    //                 : AppLocalizations.of(context)!.message_lose,
-    //             style:
-    //                 const TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
-    //           ),
-    //           IconButton(
-    //             onPressed: () {
-    //               gameData.resetGame();
-    //               gameData.gameOver = false;
-    //               _resetTimer();
-    //               setState(() {});
-    //             },
-    //             icon: const Icon(Icons.refresh, size: 40),
-    //           )
-    //         ],
-    //       ),
-    //     ),
-    //   );
-    // }
 
     AppBar appBar = AppBar(
       elevation: 0,
