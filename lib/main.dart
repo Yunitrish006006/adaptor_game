@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:adaptor_games/ui/combined_notifier.dart';
-import 'package:adaptor_games/ui/screens/mine_sweeper_screen.dart';
+import 'package:adaptor_games/ui/screens/menu_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
             locale: notifier.currentLocale,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            home: const MineSweepGameScreen(),
+            home: const MenuScreen(),
           );
         },
       ),

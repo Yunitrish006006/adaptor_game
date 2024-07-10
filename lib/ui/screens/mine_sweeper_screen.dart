@@ -7,19 +7,22 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:async';
 
 class MineSweepGameScreen extends StatefulWidget {
-  const MineSweepGameScreen({super.key});
+  const MineSweepGameScreen(this.game, {super.key});
+
+  final MineSweeperGame game;
 
   @override
   State<MineSweepGameScreen> createState() => _MineSweepGameScreenState();
 }
 
 class _MineSweepGameScreenState extends State<MineSweepGameScreen> {
-  MineSweeperGame gameData = MineSweeperGame(30, 16, 99);
+  late MineSweeperGame gameData;
   Timer? _timer;
   int _secondsElapsed = 0;
 
   @override
   void initState() {
+    gameData = widget.game;
     super.initState();
     gameData.resetGame();
     _startTimer();
@@ -175,19 +178,23 @@ class _MineSweepGameScreenState extends State<MineSweepGameScreen> {
     AppBar appBar = AppBar(
       elevation: 0,
       centerTitle: false,
-      toolbarHeight: 30,
+      toolbarHeight: 40,
       surfaceTintColor: Colors.transparent,
       backgroundColor: Colors.transparent,
-      title: Row(
+      title: Text(AppLocalizations.of(context)!.title_mine_sweeper),
+      actions: [settingButton(context)],
+    );
+
+    SizedBox statusBar = SizedBox(
+      height: 30,
+      child: Row(
         children: [
-          getStatusField(context, Icons.g_mobiledata,
-              AppLocalizations.of(context)!.title_mine_sweeper, 7),
           getStatusField(context, Icons.flag,
               (gameData.getActualMine() - gameData.flagCount).toString(), 3),
           getStatusField(context, Icons.timer, _formatTime(_secondsElapsed), 4),
+          switchButton(context, gameData)
         ],
       ),
-      actions: [settingButton(context), switchButton(context, gameData)],
     );
 
     return Scaffold(
@@ -195,11 +202,13 @@ class _MineSweepGameScreenState extends State<MineSweepGameScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          statusBar,
           Container(
             width: double.infinity,
             height: MediaQuery.sizeOf(context).height -
                 24 -
-                appBar.preferredSize.height,
+                appBar.preferredSize.height -
+                statusBar.height!,
             padding: const EdgeInsets.all(10),
             child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

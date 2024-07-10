@@ -107,7 +107,7 @@ Expanded getStatusField(
   return Expanded(
     flex: width,
     child: Container(
-      margin: const EdgeInsets.symmetric(horizontal: 2),
+      margin: const EdgeInsets.symmetric(horizontal: 4),
       padding: const EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
         color: add3_2(theme.canvasColor, theme.hintColor),
@@ -119,13 +119,13 @@ Expanded getStatusField(
           Icon(
             icon,
             color: add3_2(Colors.blue, theme.secondaryHeaderColor),
-            size: 20,
+            size: 32,
           ),
           Text(
             value,
             style: TextStyle(
                 color: add4_1(Colors.white, theme.secondaryHeaderColor),
-                fontSize: 16,
+                fontSize: 22,
                 fontWeight: FontWeight.bold),
           ),
         ],
