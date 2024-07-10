@@ -180,10 +180,10 @@ class _MineSweepGameScreenState extends State<MineSweepGameScreen> {
       title: Row(
         children: [
           getStatusField(context, Icons.g_mobiledata,
-              AppLocalizations.of(context)!.title_mine_sweeper),
+              AppLocalizations.of(context)!.title_mine_sweeper, 7),
           getStatusField(context, Icons.flag,
-              (gameData.getActualMine() - gameData.flagCount).toString()),
-          getStatusField(context, Icons.timer, _formatTime(_secondsElapsed)),
+              (gameData.getActualMine() - gameData.flagCount).toString(), 3),
+          getStatusField(context, Icons.timer, _formatTime(_secondsElapsed), 4),
         ],
       ),
       actions: [settingButton(context), switchButton(context, gameData)],

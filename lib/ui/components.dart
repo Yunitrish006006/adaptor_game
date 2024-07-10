@@ -101,9 +101,11 @@ IconButton settingButton(BuildContext context) {
       icon: const Icon(Icons.settings));
 }
 
-Expanded getStatusField(BuildContext context, IconData icon, String value) {
+Expanded getStatusField(
+    BuildContext context, IconData icon, String value, int width) {
   ThemeData theme = Theme.of(context);
   return Expanded(
+    flex: width,
     child: Container(
       margin: const EdgeInsets.symmetric(horizontal: 2),
       padding: const EdgeInsets.symmetric(horizontal: 4),
