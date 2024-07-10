@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppColor {
   static List<Color> letterColors = [
+    Colors.transparent,
     Colors.white,
     Colors.blue.shade400,
     Colors.green.shade200,

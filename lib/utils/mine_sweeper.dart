@@ -1,42 +1,47 @@
 import 'dart:math';
 
 class MineSweeperGame {
-  static int row = 6;
-  static int col = 6;
-  static int cells = row * col;
+  int row;
+  int col;
+  int bombs;
+  MineSweeperGame(this.row, this.col, this.bombs) {
+    resetGame();
+  }
+  /*dynamic ones*/
   String mode = "defuse";
   bool gameOver = false;
   int flagCount = 0;
-  static int mineCountSetting = 6;
-  List<Cell> gameMap = [];
   bool win = false;
-  static List<List<Cell>> map = List.generate(
-      row, (x) => List.generate(col, (y) => Cell(x, y, "", false)));
-  void generateMap() {
-    placeMines(mineCountSetting);
-    for (int i = 0; i < row; i++) {
-      for (int j = 0; j < col; j++) {
-        gameMap.add(map[i][j]);
+  List<List<Cell>> map = [];
+
+  int cells() {
+    return row * col;
+  }
+
+  void resetGame() {
+    map = List.generate(row, (x) => List.generate(col, (y) => Cell(x, y, "")));
+    flagCount = 0;
+    mode = "defuse";
+    placeMines(bombs);
+  }
+
+  void placeMines(int minesNumber) {
+    Random random = Random();
+    for (int i = 0; i < minesNumber;) {
+      int mineRow = random.nextInt(row);
+      int mineCol = random.nextInt(col);
+      Cell current = map[mineRow][mineCol];
+      if (current.content != "X") {
+        current.content = "X";
+        i++;
       }
     }
   }
 
-  void resetGame() {
-    map = List.generate(
-        row, (x) => List.generate(col, (y) => Cell(x, y, "", false)));
-    gameMap.clear();
-    flagCount = 0;
-    mode = "defuse";
-    generateMap();
-  }
-
-  static void placeMines(int minesNumber) {
-    Random random = Random();
-    for (int i = 0; i < minesNumber; i++) {
-      int mineRow = random.nextInt(row);
-      int mineCol = random.nextInt(col);
-      if (map[mineRow][mineCol].content != "X") {
-        map[mineRow][mineCol] = Cell(mineRow, mineCol, "X", false);
+  void showAll() {
+    for (int i = 0; i < row; i++) {
+      for (int j = 0; j < col; j++) {
+        map[i][j].reveal = true;
       }
     }
   }
@@ -135,5 +140,5 @@ class Cell {
   dynamic content;
   bool reveal = false;
   bool flagged = false;
-  Cell(this.row, this.col, this.content, this.reveal);
+  Cell(this.row, this.col, this.content);
 }

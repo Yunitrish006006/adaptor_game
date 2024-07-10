@@ -4,6 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
+Widget autoSizedText(String content,
+    {Color color = Colors.grey, FontWeight fontWeight = FontWeight.normal}) {
+  return FittedBox(
+    fit: BoxFit.fitWidth,
+    child: Text(
+      content,
+      style: TextStyle(fontSize: 200, color: color, fontWeight: fontWeight),
+    ),
+  );
+}
+
 Widget generalKit(BuildContext context, CombinedNotifier notifier,
     DropdownButton child, String title) {
   return Padding(
@@ -94,8 +105,8 @@ Expanded getStatusField(BuildContext context, IconData icon, String value) {
   ThemeData theme = Theme.of(context);
   return Expanded(
     child: Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
         color: add3_2(theme.canvasColor, theme.hintColor),
         borderRadius: BorderRadius.circular(8),
@@ -106,13 +117,13 @@ Expanded getStatusField(BuildContext context, IconData icon, String value) {
           Icon(
             icon,
             color: add3_2(Colors.blue, theme.secondaryHeaderColor),
-            size: 34,
+            size: 20,
           ),
           Text(
             value,
             style: TextStyle(
                 color: add4_1(Colors.white, theme.secondaryHeaderColor),
-                fontSize: 32,
+                fontSize: 16,
                 fontWeight: FontWeight.bold),
           ),
         ],

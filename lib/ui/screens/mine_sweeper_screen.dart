@@ -1,7 +1,7 @@
 import 'package:adaptor_games/ui/components.dart';
 import 'package:adaptor_games/ui/theme/colors.dart';
 import 'package:adaptor_games/utils/color_operation.dart';
-import 'package:adaptor_games/utils/game_helper.dart';
+import 'package:adaptor_games/utils/mine_sweeper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:async';
@@ -14,14 +14,14 @@ class MineSweepGameScreen extends StatefulWidget {
 }
 
 class _MineSweepGameScreenState extends State<MineSweepGameScreen> {
-  MineSweeperGame gameData = MineSweeperGame();
+  MineSweeperGame gameData = MineSweeperGame(30, 16, 99);
   Timer? _timer;
   int _secondsElapsed = 0;
 
   @override
   void initState() {
     super.initState();
-    gameData.generateMap();
+    gameData.resetGame();
     _startTimer();
   }
 
@@ -59,31 +59,35 @@ class _MineSweepGameScreenState extends State<MineSweepGameScreen> {
         BuildContext context, Cell current, MineSweeperGame game) {
       if (game.gameOver) {
         if (current.content == "X") {
-          return const Text(
-            "💣",
-            style: TextStyle(fontSize: 32),
-          );
+          return autoSizedText("💣");
         } else if (current.content == "") {
           return Container();
         } else {
-          return Text(
-            "${current.content}",
-            style: TextStyle(
-              color: AppColor.letterColors[current.content],
-              fontSize: 20,
-            ),
-          );
+          return autoSizedText("${current.content}",
+              color: AppColor.letterColors[current.content]);
         }
       } else {
         if (current.flagged) {
-          return const Icon(Icons.flag);
+          return FittedBox(
+            fit: BoxFit.fitWidth,
+            child: Icon(
+              Icons.flag,
+              color:
+                  add4_1(Colors.red, Theme.of(context).primaryIconTheme.color!),
+            ),
+          );
         } else {
           if (current.reveal) {
-            return Text(
-              "${current.content}",
-              style: TextStyle(
-                  color: AppColor.letterColors[current.content], fontSize: 20),
-            );
+            if (current.content is int) {
+              return autoSizedText("${current.content}",
+                  color: AppColor.letterColors[current.content]);
+            } else {
+              if (current.content == "X") {
+                return autoSizedText("💣");
+              } else {
+                return Container();
+              }
+            }
           } else {
             return Container();
           }
@@ -92,7 +96,7 @@ class _MineSweepGameScreenState extends State<MineSweepGameScreen> {
     }
 
     Widget getTile(BuildContext context, int index) {
-      Cell current = gameData.gameMap[index];
+      Cell current = gameData.map[index ~/ gameData.col][index % gameData.col];
       return GestureDetector(
         onTap: gameData.gameOver
             ? null
@@ -126,7 +130,7 @@ class _MineSweepGameScreenState extends State<MineSweepGameScreen> {
                 game.mode = "flag";
               });
             },
-            icon: const Icon(Icons.cut, size: 32));
+            icon: const Icon(Icons.cut));
       } else {
         return IconButton(
             onPressed: () {
@@ -134,69 +138,80 @@ class _MineSweepGameScreenState extends State<MineSweepGameScreen> {
                 game.mode = "defuse";
               });
             },
-            icon: const Icon(Icons.flag, size: 32));
+            icon: const Icon(Icons.flag));
       }
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        centerTitle: true,
-        title: Text(AppLocalizations.of(context)!.title_mine_sweeper),
-        actions: [settingButton(context)],
+    // if (gameData.gameOver) {
+    //   showDialog(
+    //     context: context,
+    //     builder: (BuildContext context) => Dialog(
+    //       child: Row(
+    //         mainAxisAlignment: MainAxisAlignment.center,
+    //         children: [
+    //           Text(
+    //             gameData.win
+    //                 ? AppLocalizations.of(context)!.message_win
+    //                 : AppLocalizations.of(context)!.message_lose,
+    //             style:
+    //                 const TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
+    //           ),
+    //           IconButton(
+    //             onPressed: () {
+    //               gameData.resetGame();
+    //               gameData.gameOver = false;
+    //               _resetTimer();
+    //               setState(() {});
+    //             },
+    //             icon: const Icon(Icons.refresh, size: 40),
+    //           )
+    //         ],
+    //       ),
+    //     ),
+    //   );
+    // }
+
+    AppBar appBar = AppBar(
+      elevation: 0,
+      centerTitle: false,
+      toolbarHeight: 30,
+      surfaceTintColor: Colors.transparent,
+      backgroundColor: Colors.transparent,
+      title: Row(
+        children: [
+          getStatusField(context, Icons.g_mobiledata,
+              AppLocalizations.of(context)!.title_mine_sweeper),
+          getStatusField(context, Icons.flag,
+              (gameData.getActualMine() - gameData.flagCount).toString()),
+          getStatusField(context, Icons.timer, _formatTime(_secondsElapsed)),
+        ],
       ),
+      actions: [settingButton(context), switchButton(context, gameData)],
+    );
+
+    return Scaffold(
+      appBar: appBar,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              getStatusField(context, Icons.flag,
-                  (gameData.getActualMine() - gameData.flagCount).toString()),
-              getStatusField(
-                  context, Icons.timer, _formatTime(_secondsElapsed)),
-              switchButton(context, gameData),
-            ],
-          ),
           Container(
             width: double.infinity,
-            height: 520,
-            padding: const EdgeInsets.all(20),
+            height: MediaQuery.sizeOf(context).height -
+                24 -
+                appBar.preferredSize.height,
+            padding: const EdgeInsets.all(10),
             child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: MineSweeperGame.row,
+                  crossAxisCount: gameData.col,
                   crossAxisSpacing: 4,
                   mainAxisSpacing: 4,
                 ),
-                itemCount: MineSweeperGame.cells,
+                itemCount: gameData.cells(),
                 itemBuilder: getTile),
           ),
-          gameData.gameOver
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      gameData.win
-                          ? AppLocalizations.of(context)!.message_win
-                          : AppLocalizations.of(context)!.message_lose,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 32),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        setState(() {
-                          gameData.resetGame();
-                          gameData.gameOver = false;
-                          _resetTimer();
-                        });
-                      },
-                      icon: const Icon(Icons.refresh, size: 40),
-                    )
-                  ],
-                )
-              : Container(),
         ],
       ),
+      resizeToAvoidBottomInset: true,
     );
   }
 }
