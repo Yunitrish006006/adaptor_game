@@ -1,11 +1,15 @@
 import 'dart:io';
 import 'package:adaptor_games/ui/combined_notifier.dart';
-import 'package:adaptor_games/ui/screens/menu_screen.dart';
+import 'package:adaptor_games/ui/screens/auth_gate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -27,7 +31,7 @@ class MyApp extends StatelessWidget {
             locale: notifier.currentLocale,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            home: const MenuScreen(),
+            home: const AuthGate(),
           );
         },
       ),

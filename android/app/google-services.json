@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "458050746882",
+    "project_id": "adaptorgames-d6e37",
+    "storage_bucket": "adaptorgames-d6e37.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:458050746882:android:6acffb079a1d6736e7451b",
+        "android_client_info": {
+          "package_name": "net.adaptor.game"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1wAyhh4mnaW3rDQpWSlEjDhCg3uIf4jY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
