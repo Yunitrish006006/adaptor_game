@@ -64,7 +64,7 @@ Widget languageKit(BuildContext context, CombinedNotifier notifier) {
           value: notifier.currentLocale,
           items: const [
             DropdownMenuItem(value: Locale("en"), child: Text("English")),
-            DropdownMenuItem(value: Locale("zh"), child: Text("繁體中文")),
+            DropdownMenuItem(value: Locale("zh", "TW"), child: Text("繁體中文")),
           ],
           onChanged: (value) {
             Provider.of<CombinedNotifier>(context, listen: false)

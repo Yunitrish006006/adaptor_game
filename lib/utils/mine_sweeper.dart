@@ -1,5 +1,8 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 class MineSweeperGame {
   int row;
   int col;
@@ -18,6 +21,25 @@ class MineSweeperGame {
 
   int cells() {
     return row * col;
+  }
+
+  void updateRecord() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (win && user != null) {
+      DocumentReference<Map<String, dynamic>> doc = FirebaseFirestore.instance
+          .collection("score_board")
+          .doc("mine_sweep")
+          .collection("of_${col}x$row")
+          .doc(user.uid);
+      var data = await doc.get();
+      try {
+        if (data.get("time") >= time) {
+          await doc.update({"time": time});
+        }
+      } catch (x) {
+        await doc.set({"time": time});
+      }
+    }
   }
 
   void resetGame() {

@@ -2,8 +2,6 @@ import 'package:adaptor_games/ui/components.dart';
 import 'package:adaptor_games/ui/theme/colors.dart';
 import 'package:adaptor_games/utils/color_operation.dart';
 import 'package:adaptor_games/utils/mine_sweeper.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:async';
@@ -114,19 +112,7 @@ class _MineSweepGameScreenState extends State<MineSweepGameScreen> {
         ),
         IconButton(
           onPressed: () async {
-            User? user = FirebaseAuth.instance.currentUser;
-            if (gameData.win && user != null) {
-              DocumentReference<Map<String, dynamic>> doc = FirebaseFirestore
-                  .instance
-                  .collection("score_board")
-                  .doc("mine_sweep")
-                  .collection("of_${gameData.col}x${gameData.row}")
-                  .doc(user.uid);
-              var data = await doc.get();
-              if (data.get("time") >= gameData.time) {
-                await doc.set({"time": gameData.time});
-              }
-            }
+            gameData.updateRecord();
             setState(() {
               gameData.resetGame();
               gameData.gameOver = false;

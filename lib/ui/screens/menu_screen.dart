@@ -15,21 +15,24 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
   Widget getGameModeButton(BuildContext context, Widget game, String title) {
-    return ElevatedButton(
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => game,
+    return Container(
+      margin: const EdgeInsets.all(10),
+      child: ElevatedButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => game,
+            ),
+          );
+        },
+        child: Text(
+          title,
+          style: TextStyle(
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+            color: add3_2(Colors.grey, Theme.of(context).highlightColor),
           ),
-        );
-      },
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: 32,
-          fontWeight: FontWeight.bold,
-          color: add3_2(Colors.grey, Theme.of(context).highlightColor),
         ),
       ),
     );
@@ -46,27 +49,41 @@ class _MenuScreenState extends State<MenuScreen> {
       body: Center(
         child: Column(
           children: [
-            const Text(
-              "遊戲模式",
-              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+            Text(
+              AppLocalizations.of(context)!.title_gamemode,
+              style: TextStyle(
+                fontSize: 40,
+                fontWeight: FontWeight.bold,
+                color: add9_1(Colors.grey, Theme.of(context).highlightColor),
+              ),
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(
+                  AppLocalizations.of(context)!.title_mine_sweeper,
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color:
+                        add3_2(Colors.grey, Theme.of(context).highlightColor),
+                  ),
+                ),
+                getGameModeButton(
+                  context,
+                  MineSweepGameScreen(MineSweeperGame(9, 9, 10)),
+                  "${AppLocalizations.of(context)!.title_easy} : 9x9",
+                ),
+                getGameModeButton(
+                  context,
+                  MineSweepGameScreen(MineSweeperGame(16, 16, 40)),
+                  "${AppLocalizations.of(context)!.title_mediate} : 16x16",
+                ),
                 getGameModeButton(
                   context,
                   MineSweepGameScreen(MineSweeperGame(30, 16, 99)),
-                  "踩地雷 : 16x30",
-                ),
-                getGameModeButton(
-                  context,
-                  MineSweepGameScreen(MineSweeperGame(16, 16, 50)),
-                  "踩地雷 : 16x16",
-                ),
-                getGameModeButton(
-                  context,
-                  MineSweepGameScreen(MineSweeperGame(12, 12, 30)),
-                  "踩地雷 : 12x12",
+                  "${AppLocalizations.of(context)!.title_expert} : 16x30",
                 ),
               ],
             )

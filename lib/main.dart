@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:adaptor_games/ui/combined_notifier.dart';
 import 'package:adaptor_games/ui/screens/auth_gate.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -21,9 +22,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<LocalizationsDelegate<dynamic>> localizationDelegate = [];
+    localizationDelegate.addAll(AppLocalizations.localizationsDelegates);
+    localizationDelegate.add(FirebaseUILocalizations.delegate);
+
     return ChangeNotifierProvider(
       create: (_) => CombinedNotifier(
-          ThemeMode.system, Locale(Platform.localeName.split("_").first)),
+        ThemeMode.system,
+        Locale(Platform.localeName.split("_").first,
+            Platform.localeName.split("_").last),
+      ),
       child: Consumer<CombinedNotifier>(
         builder: (context, notifier, _) {
           return MaterialApp(
@@ -32,7 +40,7 @@ class MyApp extends StatelessWidget {
             darkTheme: ThemeData.dark(),
             themeMode: notifier.themeMode,
             locale: notifier.currentLocale,
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            localizationsDelegates: localizationDelegate,
             supportedLocales: AppLocalizations.supportedLocales,
             home: const AuthGate(),
           );

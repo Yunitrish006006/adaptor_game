@@ -11,3 +11,7 @@ Color add3_2(Color base, Color mixin) {
 Color add4_1(Color base, Color mixin) {
   return Color.alphaBlend(base.withAlpha(200), mixin.withAlpha(55));
 }
+
+Color add9_1(Color base, Color mixin) {
+  return Color.alphaBlend(base.withAlpha(230), mixin.withAlpha(25));
+}
