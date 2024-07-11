@@ -2,6 +2,8 @@ import 'package:adaptor_games/ui/components.dart';
 import 'package:adaptor_games/ui/theme/colors.dart';
 import 'package:adaptor_games/utils/color_operation.dart';
 import 'package:adaptor_games/utils/mine_sweeper.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:async';
@@ -48,12 +50,6 @@ class _MineSweepGameScreenState extends State<MineSweepGameScreen> {
     });
     _timer?.cancel();
     _startTimer();
-  }
-
-  String _formatTime(int seconds) {
-    final minutes = seconds ~/ 60;
-    final remainingSeconds = seconds % 60;
-    return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
   }
 
   @override
@@ -109,7 +105,16 @@ class _MineSweepGameScreenState extends State<MineSweepGameScreen> {
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
           ),
           IconButton(
-            onPressed: () {
+            onPressed: () async {
+              User? user = FirebaseAuth.instance.currentUser;
+              if (gameData.win && user != null) {
+                await FirebaseFirestore.instance
+                    .collection("score_board")
+                    .doc("mine_sweep")
+                    .collection("of_${gameData.col}x${gameData.row}")
+                    .doc(user.uid)
+                    .set({"time": _secondsElapsed});
+              }
               setState(() {
                 gameData.resetGame();
                 gameData.gameOver = false;
@@ -191,7 +196,7 @@ class _MineSweepGameScreenState extends State<MineSweepGameScreen> {
         children: [
           getStatusField(context, Icons.flag,
               (gameData.getActualMine() - gameData.flagCount).toString(), 3),
-          getStatusField(context, Icons.timer, _formatTime(_secondsElapsed), 4),
+          getStatusField(context, Icons.timer, formatTime(_secondsElapsed), 4),
           switchButton(context, gameData)
         ],
       ),
@@ -206,7 +211,7 @@ class _MineSweepGameScreenState extends State<MineSweepGameScreen> {
           Container(
             width: double.infinity,
             height: MediaQuery.sizeOf(context).height -
-                24 -
+                54 -
                 appBar.preferredSize.height -
                 statusBar.height!,
             padding: const EdgeInsets.all(10),

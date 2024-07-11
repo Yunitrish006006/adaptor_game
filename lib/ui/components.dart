@@ -1,5 +1,7 @@
 import 'package:adaptor_games/ui/combined_notifier.dart';
+import 'package:adaptor_games/ui/screens/score_screen.dart';
 import 'package:adaptor_games/utils/color_operation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -35,6 +37,21 @@ Widget generalKit(BuildContext context, CombinedNotifier notifier,
       ),
     ),
   );
+}
+
+String formatTime(int seconds) {
+  final minutes = seconds ~/ 60;
+  final remainingSeconds = seconds % 60;
+  return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
+}
+
+Future<String?> getUserData(String userId, String field) async {
+  DocumentSnapshot snapshot =
+      await FirebaseFirestore.instance.collection('users').doc(userId).get();
+  if (snapshot.exists) {
+    return snapshot.get(field);
+  }
+  return null;
 }
 
 Widget languageKit(BuildContext context, CombinedNotifier notifier) {
@@ -101,6 +118,17 @@ IconButton settingButton(BuildContext context) {
       icon: const Icon(Icons.settings));
 }
 
+IconButton scoreBOardButton(BuildContext context) {
+  return IconButton(
+      onPressed: () async {
+        showDialog(
+          context: context,
+          builder: (conytext) => const ScoreScreen(),
+        );
+      },
+      icon: const Icon(Icons.align_vertical_bottom));
+}
+
 Expanded getStatusField(
     BuildContext context, IconData icon, String value, int width) {
   ThemeData theme = Theme.of(context);
@@ -110,7 +138,7 @@ Expanded getStatusField(
       margin: const EdgeInsets.symmetric(horizontal: 4),
       padding: const EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
-        color: add3_2(theme.canvasColor, theme.hintColor),
+        color: addEven(Colors.grey, theme.hintColor),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
