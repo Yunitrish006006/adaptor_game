@@ -39,13 +39,10 @@ class _ScoreScreenState extends State<ScoreScreen> {
       DocumentSnapshot smallestDoc = querySnapshot.docs.first;
       String? userName = await getUserData(smallestDoc.id, "name");
       if (userName != null) {
-        return "$userName:      ${formatTime(smallestDoc.get("time"))}";
-      } else {
-        return "${smallestDoc.id}:      ${formatTime(smallestDoc.get("time"))}";
+        return "${formatTime(smallestDoc.get("time"))}   - $userName";
       }
-    } else {
-      return "no record";
     }
+    return "no record";
   }
 
   Container surround(Widget content) {

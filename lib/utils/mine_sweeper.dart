@@ -9,9 +9,11 @@ class MineSweeperGame {
   }
   /*dynamic ones*/
   String mode = "defuse";
-  bool gameOver = false;
   int flagCount = 0;
+  int time = 0;
+  bool gameOver = false;
   bool win = false;
+  bool paused = false;
   List<List<Cell>> map = [];
 
   int cells() {

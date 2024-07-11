@@ -40,9 +40,11 @@ Widget generalKit(BuildContext context, CombinedNotifier notifier,
 }
 
 String formatTime(int seconds) {
+  final hours = seconds ~/ (60 * 60);
+  seconds = seconds % (60 * 60);
   final minutes = seconds ~/ 60;
-  final remainingSeconds = seconds % 60;
-  return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
+  seconds = seconds % 60;
+  return '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
 }
 
 Future<String?> getUserData(String userId, String field) async {
@@ -95,8 +97,9 @@ Widget themeKit(BuildContext context, CombinedNotifier notifier) {
       AppLocalizations.of(context)!.theme);
 }
 
-IconButton settingButton(BuildContext context) {
+IconButton settingButton(BuildContext context, {VoidCallback? x}) {
   CombinedNotifier notifier = Provider.of<CombinedNotifier>(context);
+  if (x != null) x;
   return IconButton(
       onPressed: () {
         showDialog(
