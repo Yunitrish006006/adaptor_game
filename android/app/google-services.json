@@ -12,7 +12,20 @@
           "package_name": "net.adaptor.game"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "458050746882-fs8earpiomlskvmbbnviubk3pk1j6odh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "net.adaptor.game",
+            "certificate_hash": "3eca469dae6d7d2f0b84631ca157b9f7ff1254a8"
+          }
+        },
+        {
+          "client_id": "458050746882-079ri7rpq67l68bjuc7er4td8meitp1l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyA1wAyhh4mnaW3rDQpWSlEjDhCg3uIf4jY"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "458050746882-079ri7rpq67l68bjuc7er4td8meitp1l.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "458050746882-i2tk3l8uevs1vodg69cn5757fs85ur7l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.adaptorGames"
+              }
+            }
+          ]
         }
       }
     }
