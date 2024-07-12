@@ -101,28 +101,46 @@ class _MineSweepGameScreenState extends State<MineSweepGameScreen> {
   }
 
   Widget getEndGameObject(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          gameData.win
-              ? AppLocalizations.of(context)!.message_win
-              : AppLocalizations.of(context)!.message_lose,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
-        ),
-        IconButton(
-          onPressed: () async {
-            gameData.updateRecord();
-            setState(() {
-              gameData.resetGame();
-              gameData.gameOver = false;
-              _resetTimer();
-              Navigator.pop(context);
-            });
-          },
-          icon: const Icon(Icons.refresh, size: 40),
-        )
-      ],
+    return Container(
+      margin: EdgeInsets.symmetric(
+        horizontal: 30,
+        vertical: MediaQuery.sizeOf(context).height / 2.4,
+      ),
+      decoration: BoxDecoration(
+        color: Theme.of(context).hintColor.withAlpha(180),
+        borderRadius: BorderRadius.circular(40),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            gameData.win
+                ? AppLocalizations.of(context)!.message_win
+                : AppLocalizations.of(context)!.message_lose,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 60,
+              color: addEven(Colors.grey, Theme.of(context).canvasColor),
+            ),
+          ),
+          IconButton(
+            onPressed: () async {
+              await gameData.updateRecord();
+              setState(() {
+                gameData.resetGame();
+                gameData.gameOver = false;
+                _resetTimer();
+                Navigator.pop(context);
+              });
+            },
+            icon: Icon(
+              Icons.refresh,
+              size: 64,
+              color: addEven(Colors.grey, Theme.of(context).canvasColor),
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -142,7 +160,13 @@ class _MineSweepGameScreenState extends State<MineSweepGameScreen> {
                 } else if (gameData.mode == "flag") {
                   gameData.flagCell(current);
                 }
-                if (gameData.gameOver) _timer?.cancel();
+                if (gameData.gameOver) {
+                  _timer?.cancel();
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) =>
+                          getEndGameObject(context));
+                }
               });
             },
       child: Container(
@@ -210,6 +234,10 @@ class _MineSweepGameScreenState extends State<MineSweepGameScreen> {
   Widget build(BuildContext context) {
     AppBar appBar = getappBar(context);
     SizedBox statusBar = getStatusBar(context);
+    double size = MediaQuery.sizeOf(context).height -
+        54 -
+        appBar.preferredSize.height -
+        statusBar.height!;
     return Scaffold(
       appBar: appBar,
       body: Column(
@@ -219,10 +247,7 @@ class _MineSweepGameScreenState extends State<MineSweepGameScreen> {
           gameData.paused
               ? Center(
                   child: SizedBox(
-                    height: MediaQuery.sizeOf(context).height -
-                        54 -
-                        appBar.preferredSize.height -
-                        statusBar.height!,
+                    height: size,
                     child: const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -237,10 +262,7 @@ class _MineSweepGameScreenState extends State<MineSweepGameScreen> {
                 )
               : Container(
                   width: double.infinity,
-                  height: MediaQuery.sizeOf(context).height -
-                      54 -
-                      appBar.preferredSize.height -
-                      statusBar.height!,
+                  height: size,
                   padding: const EdgeInsets.all(10),
                   child: GridView.builder(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

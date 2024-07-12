@@ -19,7 +19,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
   String best_16x30 = "";
 
   void _startTimer() {
-    _timer = Timer.periodic(const Duration(milliseconds: 1), (timer) async {
+    _timer = Timer.periodic(const Duration(milliseconds: 200), (timer) async {
       setState(() {});
       best_9x9 = await getSmallestValue("mine_sweep", "of_9x9");
       best_16x16 = await getSmallestValue("mine_sweep", "of_16x16");
@@ -34,17 +34,20 @@ class _ScoreScreenState extends State<ScoreScreen> {
         .doc(game)
         .collection(mode)
         .orderBy("time")
-        .limit(1)
+        .limit(10)
         .get();
 
+    String temp = "";
+
     if (querySnapshot.docs.isNotEmpty) {
-      DocumentSnapshot smallestDoc = querySnapshot.docs.first;
-      String? userName = await getUserData(smallestDoc.id, "name");
-      if (userName != null) {
-        return "${formatTime(smallestDoc.get("time"))} - $userName";
+      for (DocumentSnapshot doc in querySnapshot.docs) {
+        String? userName = await getUserData(doc.id, "name");
+        if (userName != null) {
+          temp += "${formatTime(doc.get("time"))} - $userName\n";
+        }
       }
     }
-    return "";
+    return temp;
   }
 
   Container surround(Widget content) {

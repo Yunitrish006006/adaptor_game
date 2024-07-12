@@ -23,7 +23,7 @@ class MineSweeperGame {
     return row * col;
   }
 
-  void updateRecord() async {
+  Future<void> updateRecord() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (win && user != null) {
       DocumentReference<Map<String, dynamic>> doc = FirebaseFirestore.instance
