@@ -22,8 +22,10 @@ class _LoginScreenState extends State<LoginScreen> {
       ],
       actions: [
         AuthStateChangeAction<SignedIn>((context, state) {
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const AuthGate()));
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const AuthGate()),
+          );
         }),
       ],
     );
