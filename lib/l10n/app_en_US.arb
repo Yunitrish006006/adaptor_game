@@ -1,0 +1,28 @@
+{
+  "@@locale":"en_US",
+  "dark":"Dark",
+  "light":"Light",
+  "system":"System",
+  "language":"Language",
+  "theme":"Theme",
+
+  "title_main":"main page",
+  "title_gamemode":"Game Modes",
+  "title_score_board":"Score board",
+  "title_setting":"settings",
+  "title_mine_sweeper" : "Mine Sweeper",
+  "message_win" : "You Win!",
+  "message_lose" : "You lose!",
+  "message_best_record": "Best of {map_size}",
+  "@message_best_record": {
+    "placeholders": {
+      "map_size": {
+        "type": "String",
+        "example": "10x10"
+      }
+    }
+  },
+  "title_easy" :"Easy",
+  "title_mediate" :"mediate",
+  "title_expert" :"Expert"
+}
