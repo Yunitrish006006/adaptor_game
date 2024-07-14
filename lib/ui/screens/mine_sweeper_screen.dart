@@ -1,5 +1,4 @@
-import 'package:adaptor_games/ui/components.dart';
-import 'package:adaptor_games/ui/theme/colors.dart';
+import 'package:adaptor_games/ui/elements.dart';
 import 'package:adaptor_games/utils/color_operation.dart';
 import 'package:adaptor_games/utils/mine_sweeper.dart';
 import 'package:flutter/material.dart';

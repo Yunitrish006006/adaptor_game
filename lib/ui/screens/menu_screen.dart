@@ -1,4 +1,4 @@
-import 'package:adaptor_games/ui/components.dart';
+import 'package:adaptor_games/ui/elements.dart';
 import 'package:adaptor_games/ui/screens/mine_sweeper_screen.dart';
 import 'package:adaptor_games/ui/screens/user_data_screen.dart';
 import 'package:adaptor_games/utils/color_operation.dart';
@@ -43,7 +43,7 @@ class _MenuScreenState extends State<MenuScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.title_main),
-        actions: [settingButton(context), scoreBOardButton(context)],
+        actions: [settingButton(context), scoreBoardButton(context)],
       ),
       drawer: const Drawer(child: UserDataScreen()),
       body: Center(

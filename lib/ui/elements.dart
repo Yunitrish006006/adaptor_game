@@ -1,10 +1,25 @@
-import 'package:adaptor_games/ui/combined_notifier.dart';
+import 'package:adaptor_games/common/combined_notifier.dart';
+import 'package:adaptor_games/common/components.dart';
 import 'package:adaptor_games/ui/screens/score_screen.dart';
 import 'package:adaptor_games/utils/color_operation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+
+class AppColor {
+  static List<Color> letterColors = [
+    Colors.transparent,
+    Colors.white,
+    Colors.blue.shade400,
+    Colors.green.shade200,
+    Colors.yellow,
+    Colors.amber,
+    Colors.orange,
+    Colors.red,
+    Colors.purple.shade300,
+  ];
+}
 
 Widget autoSizedText(String content,
     {Color color = Colors.grey, FontWeight fontWeight = FontWeight.normal}) {
@@ -13,28 +28,6 @@ Widget autoSizedText(String content,
     child: Text(
       content,
       style: TextStyle(fontSize: 200, color: color, fontWeight: fontWeight),
-    ),
-  );
-}
-
-Widget generalKit(BuildContext context, CombinedNotifier notifier,
-    DropdownButton child, String title) {
-  return Padding(
-    padding: const EdgeInsets.all(4.0),
-    child: Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Text(
-              title,
-              style: const TextStyle(fontSize: 20),
-            ),
-          ),
-          child,
-        ],
-      ),
     ),
   );
 }
@@ -56,47 +49,6 @@ Future<String?> getUserData(String userId, String field) async {
   return null;
 }
 
-Widget languageKit(BuildContext context, CombinedNotifier notifier) {
-  return generalKit(
-      context,
-      notifier,
-      DropdownButton(
-          value: notifier.currentLocale,
-          items: const [
-            DropdownMenuItem(value: Locale("en", "US"), child: Text("English")),
-            DropdownMenuItem(value: Locale("zh", "TW"), child: Text("繁體中文")),
-          ],
-          onChanged: (value) {
-            Provider.of<CombinedNotifier>(context, listen: false)
-                .updateLocale(value ?? const Locale('en'));
-          }),
-      AppLocalizations.of(context)!.language);
-}
-
-Widget themeKit(BuildContext context, CombinedNotifier notifier) {
-  return generalKit(
-      context,
-      notifier,
-      DropdownButton(
-          value: notifier.themeMode,
-          items: [
-            DropdownMenuItem(
-                value: ThemeMode.dark,
-                child: Text(AppLocalizations.of(context)!.dark)),
-            DropdownMenuItem(
-                value: ThemeMode.light,
-                child: Text(AppLocalizations.of(context)!.light)),
-            DropdownMenuItem(
-                value: ThemeMode.system,
-                child: Text(AppLocalizations.of(context)!.system)),
-          ],
-          onChanged: (value) {
-            Provider.of<CombinedNotifier>(context, listen: false)
-                .toggleTheme(value ?? ThemeMode.system);
-          }),
-      AppLocalizations.of(context)!.theme);
-}
-
 IconButton settingButton(BuildContext context, {VoidCallback? x}) {
   CombinedNotifier notifier = Provider.of<CombinedNotifier>(context);
   if (x != null) x;
@@ -112,7 +64,8 @@ IconButton settingButton(BuildContext context, {VoidCallback? x}) {
             content: Column(
               children: [
                 languageKit(context, notifier),
-                themeKit(context, notifier),
+                themeModeKit(context, notifier),
+                colorThemeKit(context, notifier)
               ],
             ),
           ),
@@ -121,7 +74,7 @@ IconButton settingButton(BuildContext context, {VoidCallback? x}) {
       icon: const Icon(Icons.settings));
 }
 
-IconButton scoreBOardButton(BuildContext context) {
+IconButton scoreBoardButton(BuildContext context) {
   return IconButton(
       onPressed: () async {
         showDialog(
